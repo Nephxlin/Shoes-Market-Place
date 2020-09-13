@@ -1,88 +1,46 @@
-import React from 'react'
-import {MdShoppingCart} from 'react-icons/md'
+import React, { Component } from "react";
+import { MdShoppingCart } from "react-icons/md";
+import { formatPrice } from "../../util/format";
+import api from "../../services/api";
 
-import {ProductList} from './styles'
+import { ProductList } from "./styles";
 
-export default function Home (){
-  return(
-    <ProductList>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
+export default class Home extends Component {
+  state = {
+    products: [],
+  };
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+  async componentDidMount() {
+    const response = await api.get("products");
 
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button>
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
+    const data = response.data.map((product) => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+    }));
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+    this.setState({ products: data });
+  }
 
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button>
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
+  render() {
+    const { products } = this.state;
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+    return (
+      <ProductList>
+        {products.map((product) => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title} />
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
+            <button type="button">
+              <div>
+                <MdShoppingCart size={16} color="#fff" />3
+              </div>
 
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button>
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button>
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-lite-racer-20-masculino/26/NQQ-0144-026/NQQ-0144-026_detalhe1.jpg?ts=1581718228?ims=280x280" alt="tenis"/>
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-        <button>
-          <div>
-            <MdShoppingCart size={16} color="#fff"/>3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  )
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
 }
