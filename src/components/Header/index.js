@@ -10,7 +10,7 @@ import logo from "../../assets/images/logo.svg";
 export default function Header() {
   return (
     <Container>
-      <Link to="">
+      <Link to="/">
         <img src={logo} alt="Shoes" />
       </Link>
 
